@@ -1,9 +1,10 @@
 <?php 
-
+include 'init.php';
+//include 'connexion.php';
 //fonctionnement des boutons
 if(isset ($_POST['Archivage'])){
     //archiver les donnees avec TP3_SP_ARCHIVER_EVENEMENT (PI_DATE in date, PI_LOGIN_USAGER in varchar)
-    $stid = oci_parse($conn, "execute TP3_SP_ARCHIVER_EVENEMENT('Archivage', LOGIN_USAGER");
+    $stid = oci_parse($conn, "execute TP3_SP_ARCHIVER_EVENEMENT('Archivage', LOGIN_USAGER");}
 
     
     if (isset($_POST['Creer']) ){
@@ -27,7 +28,7 @@ if(isset ($_POST['Archivage'])){
     }
     
 
-if($_SESSION['usager'] == 'Administrateur')
+if($_SESSION['TYPE_USA'] == 'Administrateur')
 {
     $stid = oci_parse($conn, "select ID_EVENEMENT, |' '|, TITRE_EVE, |' '|, DATE_HEURE_DEBUT_EVE 
                                 from TP2_EVENEMENT EVE
@@ -47,40 +48,56 @@ if($_SESSION['usager'] == 'Administrateur')
 }
 
 
-if($_SESSION['usager'] == 'client'){
+
+
+if($_SESSION['TYPE_USA'] == 'Client'){
+    echo "dans if client";
+     
     
-    $stid = oci_parse($conn, "select ID_EVENEMENT, |' '|, TITRE_EVE, |' '|, DATE_HEURE_DEBUT_EVE 
+    
+     //if(oci_parse($conn, "select ID_EVENEMENT from TP2_EVENEMENT 
+//where NOM_ORGANISME = '".$_SESSION['NOM_ORGANISME']."'") != null){
+    
+ $stid = oci_parse($conn, "select ID_EVENEMENT, |' '|, TITRE_EVE, |' '|, DATE_HEURE_DEBUT_EVE 
                                 from TP2_EVENEMENT EVE 
                                 where NOM_ORGANISME = '".$_SESSION['NOM_ORGANISME']."' 
                                 and ID_EVENEMENT not in TP2_EVENEMENT_ARCHIVE
                                 order by DATE_HEURE_DEBUT_EVE  ");
-    
+ //trouver une maniere de ne pas executer oci_execute si on a pas de donnes    
+ if (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false)
+ {
+     echo stid;
+     echo "dans is stid";
+ 
+ oci_execute($stid);
+ 
+     echo "<select size=\"20\">";
+     while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false)
+     {
+         
+         echo "<option>".$row["ID_EVENEMENT"] .$row["TITRE_EVE"] .$row["DATE_HEURE_DEBUT_EVE"] ."</option>";
+         
+     }
+     echo  "<form method ='post'><p>";
+     echo "<input type = \"button\" value = \"Mettre a jour\"><br>";
+     echo "<input type = \"button\" value = \"Rechercher\"> <br>";
+     echo "</p></form>";
+     
+     
+     echo "</select>";
+     oci_execute($stid);
+     
+     }
 
-    
-    oci_execute($stid);
-    
-}
-
-$listeEvenement = "<select size=\"20\">";
-
-if (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) == false)
-{$erreur = "Aucun evenement n'est accessible"; }
-
-else  { 
-    while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false)
+     //if (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) == false)  
+else 
 {
-    $listeEvenement .= "<option values = \"{$row["ID_EVENEMENT"]} {$row["TITRE_EVE"]} {$row["DATE_HEURE_DEBUT_EVE"]} </option>";
-    
-}
-$boutons =  "<form method =\"post\"><p>";
-echo "<input type = \"button\" value = \"Mettre a jour\"><br>";
-echo "<input type = \"button\" value = \"Rechercher\"> <br>";
-$boutons .= "</p></form>";
+    echo "Aucun evenement n'est accessible"; 
+     }
+    // }
+    //echo var_dump($row);}
 
-}
-$listeEvenement .= "</select>";
-
-
+    //if (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false){}
 //creer : afficher page evenement.php en mode ajout
 //metre a jour: afficher page evenement.php en mode modif, passe ID_EVENEMENT EN PARAMETRE
 //Rechercher affiche page evenement_rechercher.php
@@ -91,12 +108,17 @@ $listeEvenement .= "</select>";
 
 //$_COOKIE ['ID_EVENEMENT']
 
-    
- 
-}
+}// fermeture if $_session client
+
+
+echo "something dans php";
+echo "<input type = \"button\" value = \"Mettre a jour\"><br>";
+echo "<input type = \"button\" value = \"Rechercher\"> <br>";
 
 ?>
-<form method = "post"
+<form method = "post">
+<p>
 <input type = "button" value = "Creer"><br> 
 <input type = "button" value = "Tous"><br>
-
+</p>
+</form>
