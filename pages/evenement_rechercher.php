@@ -60,7 +60,7 @@ if(isset($_POST["rechercher"]))
     $evenement=$_POST["evenement"];
     $organisme=$_POST["organisme"];
     $date=$_POST["date"];
-    include("DBConnexion.php");
+    include("init.php");
     if($organisme == NULL){$organisme =  ".";}
     if($evenement == NULL){$evenement =  ".";}
     if($date == NULL){$date =  ".";}

@@ -17,6 +17,9 @@
                     case "evenement_rechercher":
                         include ("./pages/evenement_rechercher.php");
                         break;
+                    case "question":
+                        include ("./pages/question.php");
+                        break;
                 }
             }
             else
