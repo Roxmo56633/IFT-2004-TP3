@@ -27,7 +27,7 @@
             }
             else
             {
-                include("./pages/connexion.php");
+                include("./pages/evenement_liste.php");
             }
             
 

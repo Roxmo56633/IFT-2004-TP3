@@ -51,7 +51,7 @@ if($_SESSION['usager'] == 'client'){
     
     $stid = oci_parse($conn, "select ID_EVENEMENT, |' '|, TITRE_EVE, |' '|, DATE_HEURE_DEBUT_EVE 
                                 from TP2_EVENEMENT EVE 
-                                where NOM_ORGANISME = '$_SESSION['NOM_ORGANISME']' 
+                                where NOM_ORGANISME = '".$_SESSION['NOM_ORGANISME']."' 
                                 and ID_EVENEMENT not in TP2_EVENEMENT_ARCHIVE
                                 order by DATE_HEURE_DEBUT_EVE  ");
     
