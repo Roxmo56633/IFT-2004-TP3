@@ -6,19 +6,24 @@
 	</head>
 	<body>
 		<?php
-            if(isset($_GET["lien"])){
+            if(isset($_GET["lien"])){ //prend le lien de l'app pour retourner une page qui s'appelle "login"
                 $lien=$_GET["lien"];
                 switch($lien)
                 {
                     case"login":
                         include ("./pages/connexion.php");
-                        break;
+                        break; 
+                    case "evenement_liste":
+                        include ("./pages/evenement_liste.php");
+                        break;                
                 }
             }
             else
             {
                 include("./pages/connexion.php");
             }
+            
+
         ?>
 	</body>
 </html>
