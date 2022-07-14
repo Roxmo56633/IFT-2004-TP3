@@ -6,12 +6,16 @@
 	</head>
 	<body>
 		<?php
+		session_start();
             if(isset($_GET["lien"])){
                 $lien=$_GET["lien"];
                 switch($lien)
                 {
                     case"login":
                         include ("./pages/connexion.php");
+                        break;
+                    case "evenement_rechercher":
+                        include ("./pages/evenement_rechercher.php");
                         break;
                 }
             }
