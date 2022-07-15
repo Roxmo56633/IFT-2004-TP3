@@ -32,8 +32,6 @@ if(isset ($_POST['archive'])){
     if (isset($_POST['MAJ'])){
         if(isset($_POST["AdminVue"])){
             echo"<script>window.location.href='index.php?lien=evenement&evenID=".$_POST["AdminVue"]."';</script>";
-        }else{
-            echo"<script>window.location.href='index.php?lien=evenement&cree=".$_POST["AdminVue"]."';</script>";
         }
         //mode modifier
         //page pas encore incluse

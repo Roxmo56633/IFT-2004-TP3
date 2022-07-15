@@ -1,0 +1,1 @@
+<h1>copyright Equipe 30 Numero de cours IFT-2004 ETE 2022</h1>
