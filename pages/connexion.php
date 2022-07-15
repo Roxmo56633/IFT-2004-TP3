@@ -9,7 +9,7 @@ if(isset($_POST["SeConnecter"]))
     oci_bind_by_name($stid, ':login_password', $password);
     oci_execute($stid);
     while (($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
-        $_SESSION['TYPE_USA']= $row["TYPE_USA"];
+       $_SESSION['TYPE_USA']= $row["TYPE_USA"];
         $_SESSION['LOGIN_USAGER']= $row["LOGIN_USAGER"];
         $_SESSION['NOM_ORGANISME']= $row["NOM_ORGANISME"];
         echo"<script>window.location.href='index.php?lien=evenement_liste'; </script>";
@@ -20,7 +20,7 @@ if(isset($_POST["SeConnecter"]))
 	<form id="connexionStyleForm" method="post">
 		<input
 			type="text"
-			placeholder="Email"
+			placeholder="Login"
 			name="email"
 		/>
 		<input 
