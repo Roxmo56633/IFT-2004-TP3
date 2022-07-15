@@ -193,10 +193,6 @@ else
 
 }// fermeture if $_session client
 
-
-
-
-
 echo "    
     <form id='Creer' method = 'post'>
     <center>

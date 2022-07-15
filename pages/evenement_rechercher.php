@@ -107,13 +107,13 @@ if(isset($_POST["rechercher"]))
         oci_bind_by_name($stid, ':dateDebut', $date);
         oci_bind_by_name($stid, ':dateFin', $date);
         oci_execute($stid);
-        
+        /*
         while(($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false)
         { $_SESSION["ID_EVENEMENT"]=$row["ID_EVENEMENT"];
         $_SESSION["TOUS"]="tous";
         echo"<script>window.location.href='index.php?lien=evenement_liste'; </script>";
         }
-        
+        */
         //while (($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
           //  echo "<tr>";
             //echo "<td>".$row["ID_EVENEMENT"]."</td>";
