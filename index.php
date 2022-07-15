@@ -11,7 +11,7 @@
                 $lien=$_GET["lien"];
                 switch($lien)
                 {
-                    case"login":
+                    case"connexion":
                         include ("./pages/connexion.php");
                         break;
                     case "evenement_rechercher":
@@ -22,7 +22,10 @@
                         break;
                     case "evenement_liste":
                         include ("./pages/evenement_liste.php");
-                        break;                
+                        break;   
+                    case "evenement":
+                        include ("./pages/evenement.php");
+                        break; 
                 }
             }
             else
