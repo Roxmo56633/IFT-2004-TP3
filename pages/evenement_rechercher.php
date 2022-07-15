@@ -1,20 +1,4 @@
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-  width: 100%;
-}
 
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
 <form method="post">
 	<input
 		type="text"
@@ -43,15 +27,35 @@ tr:nth-child(even) {
 		id="birthday" 
 		name="annule"
 	/>
-</form>
-<table>
-<td>ID_EVENEMENT</td>
-<td>TITRE_EVE</td>
-<td>NOM_ORGANISME</td>
-<td>DATE_HEURE_FIN_EVE</td>
-<td>DATE_HEURE_DEBUT_EVE</td>
+
 <?php
-if(isset($_POST["annule"]))
+/*
+ * //</form>
+//<table>
+//<td>ID_EVENEMENT</td>
+//<td>TITRE_EVE</td>
+//<td>NOM_ORGANISME</td>
+//<td>DATE_HEURE_FIN_EVE</td>
+//<td>DATE_HEURE_DEBUT_EVE</td>
+//if(isset($_POST["annule"]))
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+//</style>
+*/
 {
     echo"<script>window.location.href='index.php'; </script>";
 }
@@ -75,15 +79,22 @@ if(isset($_POST["rechercher"]))
     oci_bind_by_name($stid, ':dateDebut', $date);
     oci_bind_by_name($stid, ':dateFin', $date);
     oci_execute($stid);
-    while (($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
-        echo "<tr>";
-        echo "<td>".$row["ID_EVENEMENT"]."</td>";
-        echo "<td>".$row["TITRE_EVE"]."</td>";
-        echo "<td>".$row["NOM_ORGANISME"]."</td>";
-        echo "<td>".$row["DATE_HEURE_FIN_EVE"]."</td>";
-        echo "<td>".$row["DATE_HEURE_DEBUT_EVE"]."</td>";
-        echo "</tr>";
-    } 
+  
+    while(($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false)
+    { $_SESSION["ID_EVENEMENT"]=$row["ID_EVENEMENT"];
+    $_SESSION["TOUS"]="tous";
+    echo"<script>window.location.href='index.php?lien=evenement_liste'; </script>";
+    }
+  
+  //  while (($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
+    //    echo "<tr>";
+      //  echo "<td>".$row["ID_EVENEMENT"]."</td>";
+        //echo "<td>".$row["TITRE_EVE"]."</td>";
+       // echo "<td>".$row["NOM_ORGANISME"]."</td>";
+       // echo "<td>".$row["DATE_HEURE_FIN_EVE"]."</td>";
+        //echo "<td>".$row["DATE_HEURE_DEBUT_EVE"]."</td>";
+       // echo "</tr>";
+    //} 
     if($_SESSION['TYPE_USA'] == "Administrateur"){
         $stid = oci_parse($conn, "select * from TP2_EVENEMENT_ARCHIVE where
                                     TITRE_EVE like '%'||:titre||'%' or
@@ -96,16 +107,22 @@ if(isset($_POST["rechercher"]))
         oci_bind_by_name($stid, ':dateDebut', $date);
         oci_bind_by_name($stid, ':dateFin', $date);
         oci_execute($stid);
-        while (($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
-            echo "<tr>";
-            echo "<td>".$row["ID_EVENEMENT"]."</td>";
-            echo "<td>".$row["TITRE_EVE"]."</td>";
-            echo "<td>".$row["NOM_ORGANISME"]."</td>";
-            echo "<td>".$row["DATE_HEURE_FIN_EVE"]."</td>";
-            echo "<td>".$row["DATE_HEURE_DEBUT_EVE"]."</td>";
-            echo "</tr>";
+        
+        while(($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false)
+        { $_SESSION["ID_EVENEMENT"]=$row["ID_EVENEMENT"];
+        $_SESSION["TOUS"]="tous";
+        echo"<script>window.location.href='index.php?lien=evenement_liste'; </script>";
+        }
+        
+        //while (($row = oci_fetch_array($stid, OCI_ASSOC+OCI_RETURN_NULLS)) != false) {
+          //  echo "<tr>";
+            //echo "<td>".$row["ID_EVENEMENT"]."</td>";
+            //echo "<td>".$row["TITRE_EVE"]."</td>";
+            //echo "<td>".$row["NOM_ORGANISME"]."</td>";
+            //echo "<td>".$row["DATE_HEURE_FIN_EVE"]."</td>";
+            //echo "<td>".$row["DATE_HEURE_DEBUT_EVE"]."</td>";
+            //echo "</tr>";
         }
     }
-}
 ?>
 </table>
