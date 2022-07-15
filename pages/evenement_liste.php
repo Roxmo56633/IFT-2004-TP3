@@ -30,8 +30,11 @@ if(isset ($_POST['archive'])){
     }
     
     if (isset($_POST['MAJ'])){
-        $_SESSION ['ID_EVENEMENT'] = $row['ID_EVENEMENT'];
-        echo"<script>window.location.href='index.php?lien=evenement';</script>";
+        if(isset($_POST["AdminVue"])){
+            echo"<script>window.location.href='index.php?lien=evenement&evenID=".$_POST["AdminVue"]."';</script>";
+        }else{
+            echo"<script>window.location.href='index.php?lien=evenement&cree=".$_POST["AdminVue"]."';</script>";
+        }
         //mode modifier
         //page pas encore incluse
     }
@@ -41,26 +44,37 @@ if(isset ($_POST['archive'])){
         //aller vers evenement_rechercher
     }
     
-    if(isset($_POST['Tous'])) {
-        echo"<script>window.location.href='index.php?lien=evement_liste';</script>";
+    if(isset($_POST['tous'])) {
+        unset($_SESSION["arrayEve"]);
+        echo"<script>window.location.href='index.php?lien=evenement_liste';</script>";
         //supprimer le array du cookie - a voir-
     }
     
-
+    echo "<form id='formMAJ' method = 'POST'>";
 
 if($_SESSION['TYPE_USA'] == $admin)
 {
-    $stid = oci_parse($conn, "select ID_EVENEMENT, TITRE_EVE, DATE_HEURE_DEBUT_EVE 
+    if(isset($_SESSION["arrayEve"])){
+        echo "<center><select size=\"20\">";
+        foreach ($_SESSION["arrayEve"] as &$val){
+            echo "<option>".$val["ID_EVENEMENT"] .$val["TITRE_EVE"] .$val["DATE_HEURE_DEBUT_EVE"] ."</option>";
+        }
+        echo "</select> </center>"; 
+    }else{
+         $stid = oci_parse($conn, "select ID_EVENEMENT, TITRE_EVE, DATE_HEURE_DEBUT_EVE 
                                 from TP2_EVENEMENT
                                 order by DATE_HEURE_DEBUT_EVE desc ");
     
     oci_execute($stid);
-    echo "<center><select size=20 name = 'AdminVue>";
+    echo "<center><select size=20 name='AdminVue'>";
     while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false)
     {
-        echo "<option value = '{$row ['ID_EVENEMENT']}'>{$row['TITRE_EVE']} {$row['DATE_HEURE_DEBUT_EVE']} </option>";        
+        
+        echo "<option value = '{$row ['ID_EVENEMENT']}'>{$row ['ID_EVENEMENT']} {$row['TITRE_EVE']} {$row['DATE_HEURE_DEBUT_EVE']} </option>"; 
     }
-   echo "</select></center>";
+   
+    }
+   
    
     echo
     "<form id='formArchivage' method='post'>
@@ -78,8 +92,6 @@ if($_SESSION['TYPE_USA'] == $admin)
     />
     </center>
     </form>
-
-    <form id='formMAJ' method = 'post'>
     <center>
     <input
         type = 'submit'
@@ -89,7 +101,7 @@ if($_SESSION['TYPE_USA'] == $admin)
     </center>
     </form>";
 
-    if(isset($_SESSION['TOUS']))
+    if(isset($_GET['re']))
     {
         echo 
         " <form id = 'tousbouton' method = 'post'>
@@ -121,30 +133,34 @@ if($_SESSION['TYPE_USA'] == $admin)
 }// fermeture de if $_SESSION admin
 
 
-
+echo "<form id='formMAJ' method = 'post'>";
 
 if($_SESSION['TYPE_USA'] == $client){
-    
-    
- $stid = oci_parse($conn, "select ID_EVENEMENT, TITRE_EVE, DATE_HEURE_DEBUT_EVE 
+    if(isset($_SESSION["arrayEve"])){
+        echo "<center><select size=\"20\">";
+        foreach ($_SESSION["arrayEve"] as &$val){
+            echo "<option>".$val["ID_EVENEMENT"] .$val["TITRE_EVE"] .$val["DATE_HEURE_DEBUT_EVE"] ."</option>";
+        }
+        echo "</select> </center>"; 
+    }else{
+        $stid = oci_parse($conn, "select ID_EVENEMENT, TITRE_EVE, DATE_HEURE_DEBUT_EVE
                                 from TP2_EVENEMENT
                                 where NOM_ORGANISME = '".$_SESSION['NOM_ORGANISME']."'
                                 and ID_EVENEMENT not in (select ID_EVENEMENT from TP2_EVENEMENT_ARCHIVE)
                                 order by DATE_HEURE_DEBUT_EVE  ");
- oci_execute($stid);
+        oci_execute($stid);
+        
+        echo "<center><select size=\"20\" name='AdminVue'>";
+        while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false)
+        {
+            echo "<option value = '{$row ['ID_EVENEMENT']}'>{$row ['ID_EVENEMENT']} {$row['TITRE_EVE']} {$row['DATE_HEURE_DEBUT_EVE']} </option>"; 
+            
+        }
+        echo "</select> </center>";    
+    }
   
- if (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false)
- { 
-     echo "<center><select size=\"20\">";
-     while (($row = oci_fetch_array($stid, OCI_ASSOC + OCI_RETURN_NULLS)) != false)
-     {
-         
-         echo "<option>".$row["ID_EVENEMENT"] .$row["TITRE_EVE"] .$row["DATE_HEURE_DEBUT_EVE"] ."</option>";
-         
-     }
-     echo "</select> </center>";     
      
- echo "<form id='formMAJ' method = 'post'>
+ echo "
         <center>
         <input
             type = 'submit'
@@ -154,7 +170,7 @@ if($_SESSION['TYPE_USA'] == $client){
         </center>
         </form>";
                  
- if(isset($_SESSION['TOUS']))
+ if(isset($_GET['re']))
  {
      echo
      " <form id = 'tousbouton' method = 'post'>
@@ -190,8 +206,6 @@ else
     echo "<center>Aucun evenement n'est accessible</center>"; 
      }
 
-
-}// fermeture if $_session client
 
 
 
