@@ -25,7 +25,7 @@ if(isset ($_POST['archive'])){
 
     
     if (isset($_POST['Creer']) ){
-        echo"<script>window.location.href='index.php?lien=evenement';</script>";
+        echo"<script>window.location.href='index.php?lien=evenement&cree=true';</script>";
         //mode ajout
     }
     
@@ -203,7 +203,7 @@ echo "
     <input
         type = 'submit'
         value = 'Creer'
-        name = 'creer'
+        name = 'Creer'
     />
     </center>
     </form>";

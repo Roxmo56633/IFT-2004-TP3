@@ -4,14 +4,43 @@
 <div id="Evenement">
  	<form id="EvenementFormulaire" method="post" >
  <?php
+ if(isset($_GET["cree"]))
+ {
+     echo "<input type='text' name='titre_evenement' ><br>";
+     echo "<input type='text'  placeholder='Organisme' name='organisme_evenement'><br>";
+     echo "<input type= 'date' placeholder='Debut evenement' name='debut_evenement'><br>";
+     echo "<input type='date'  placeholder='Fin evenement' name='fin_evenement'><br>";
+     echo "<input type='number' placeholder='coût' name='cout_evenement'><br>";
+     echo "<input type='text' placeholder='bandereau' name='bandereau_evenement'><br>";
+     echo "<button type='submit' name='okCree'> Ok </button>";
+ }
+ if(isset($_POST["okCree"]))
+ {
+     include("init.php");
+     $stid = oci_parse($conn, "insert into TP2_EVENEMENT(
+            ID_EVENEMENT,
+            TITRE_EVE,
+            DATE_HEURE_DEBUT_EVE,
+            DATE_HEURE_FIN_EVE,
+            BANDEAU_PC_EVE, 
+            MNT_PRIX_EVE,
+            LOGO_EVE,
+            BANDEAU_MOBILE_EVE,
+            NOM_ORGANISME
+            ) values
+           (ID_EVENEMENT_SEQ.nextval,:titre,:debut,:fin,:bandeu,:cout,'Ok',:bandeu,:org)");
+     
+     oci_bind_by_name($stid, ':titre', $_POST["titre_evenement"]);
+     oci_bind_by_name($stid, ':debut', $_POST["debut_evenement"]);
+     oci_bind_by_name($stid, ':fin', $_POST["fin_evenement"]);
+     oci_bind_by_name($stid, ':bandeu', $_POST["bandereau_evenement"]);
+     oci_bind_by_name($stid, ':cout', $_POST["cout_evenement"]);
+     oci_bind_by_name($stid, ':org', $_POST["organisme_evenement"]);
+     oci_execute($stid);
+ }
  if(isset($_POST["ok"]))
  {
      include("init.php");
-     $titre_evenement=$_POST["titre_evenement"];
-     $debut_evenement=$_POST["debut_evenement"];
-     $fin_evenement=$_POST["fin_evenement"];
-     $cout_evenement=$_POST["cout_evenement"];
-     $bandeau_evenement=$_POST["bandereau_evenement"];
      $stid = oci_parse($conn, "update TP2_EVENEMENT set
             TITRE_EVE=:titre,
             DATE_HEURE_DEBUT_EVE=:debut,
@@ -67,11 +96,11 @@ if(isset($_GET["evenID"]))
             echo "<option value='".$row3["ID_QUESTION"]."'>".$row3["TEXTE_QUE"]."</option>";
         }
         echo "</select>";
+        echo "<button type='submit' name='ok'> Ok </button>";
+        echo "<button type='submit' name='details'>Details</button><br> ";
     } 
 }
 ?>
-		<button type='submit' name="details">Details</button><br> 
-		<button type='submit' name="ok"> Ok </button>
 		<button type='submit' name="annuler"> Annuler</button>
 	</form> 
 </div>
